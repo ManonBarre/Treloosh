@@ -6,6 +6,9 @@
 <div class="app">
     <div id="bann">
         <h1><?= $table['nom_tableau']; ?></h1>
+        <form method="POST">
+            <button type="submit" name="btn-delete" id="btn-delete">Supprimer le loosh</button>
+        </form>
     </div>
 
     <div class="lists">

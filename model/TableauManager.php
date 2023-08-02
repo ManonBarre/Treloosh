@@ -5,7 +5,7 @@ require_once 'connectDB.php';
 class TableauManager
 {
     /**
-     * Retourne toutes les tableaux d'un utilisateur
+     * Retourne tout les tableaux d'un utilisateur
      *
      * @param int $userId
      * @return PDOStatement|false
@@ -13,7 +13,7 @@ class TableauManager
     public function getTables(int $userId): PDOStatement|false
     {
         $dbh = new PDO(DSN, LOGIN, PASSWORD, array(PDO::ATTR_PERSISTENT => true));
-        $tables = $dbh->prepare("select id, nom_tableau from tableau where id_utilisateur = :userId");
+        $tables = $dbh->prepare("SELECT id, nom_tableau from tableau where id_utilisateur = :userId");
         $tables->execute(array('userId' => $userId));
 
         return $tables;
@@ -21,7 +21,7 @@ class TableauManager
 
 
     /**
-     * Retourne toutes les tableaux d'un utilisateur
+     * Retourne tout les tableaux d'un utilisateur
      *
      * @param int $userId id de l'utilisateur
      * @param int $tableId id du tableau choisi
@@ -30,7 +30,7 @@ class TableauManager
     public function getTable(int $userId, int $tableId): mixed
     {
         $dbh = new PDO(DSN, LOGIN, PASSWORD, array(PDO::ATTR_PERSISTENT => true));
-        $table = $dbh->prepare("select id, nom_tableau from tableau where id = :tableId and id_utilisateur = :userId");
+        $table = $dbh->prepare("SELECT id, nom_tableau from tableau where id = :tableId and id_utilisateur = :userId");
         $table->execute(array('tableId' => $tableId, 'userId' => $userId));
         if ($row = $table->fetch()) {
             return $row;
@@ -40,7 +40,7 @@ class TableauManager
     }
 
     /**
-     * Crée une catégorie
+     * Crée un tableau
      *
      * @param int $userId
      * @param string $tableName
@@ -53,5 +53,22 @@ class TableauManager
         $affectedLines = $table->execute(array('userID' => $userId, 'tableName' => $tableName));
 
         return $affectedLines;
+    }
+
+    /**
+     * Supprime un tableau 
+     * 
+     * @return bool retourne true si la suppression est reussi sinon false
+     */
+    public function delete(int $tableId): bool
+    {
+
+        $dbh = new PDO(DSN, LOGIN, PASSWORD, array(PDO::ATTR_PERSISTENT => true));
+        $table = $dbh->prepare("DELETE FROM tableau WHERE id = :tableId ");
+
+        if ($table->execute(array('tableId' => $tableId))) {
+            return true;  
+        }
+        return false;
     }
 }

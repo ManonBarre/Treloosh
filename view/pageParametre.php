@@ -26,6 +26,7 @@
         <input type="text" name="firstname" placeholder="Prénom" value="<?= $user->getFirstname(); ?>" />
 
         <input id="button" type="submit" value="Enregistrer les modifications" name="modif">
+        <input id="button-delete" type="submit" value="Supprimer le compte" name="delete">
     </form>
 
     <div>

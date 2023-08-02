@@ -254,6 +254,7 @@ class User
                      prenom = :firstname,
                      photo = :photo 
                      where id =' . $this->getId());
+                echo "Modification effectuée";
             } else {
                 if ($this->checkUser($this->getMail())) {
                     throw new Exception("Cet email a déjà été utilisé");
@@ -268,7 +269,26 @@ class User
                 print '<p>Erreur de récupération des données : ' . $statement->errorCode() . '</p>';
                 return false;
             }
+            return true;
+        } catch (PDOException $e) {
+            print "Erreur!:" . $e->getMessage() . "<br/>";
+            die();
+        }
+    }
 
+    public function delete(): bool
+    {
+        try {
+            $dbh = new PDO(DSN, LOGIN, PASSWORD, array(PDO::ATTR_PERSISTENT => true));
+            if ($this->getId()) {
+                $statement = $dbh->prepare('DELETE FROM utilisateur WHERE id = ' . $this->getId());
+            }
+
+            if (!$statement->execute()) {
+                // Si $statement->execute() == false, on affiche le code d'erreur
+                print '<p>Erreur de suppression des données : ' . $statement->errorCode() . '</p>';
+                return false;
+            }
             return true;
         } catch (PDOException $e) {
             print "Erreur!:" . $e->getMessage() . "<br/>";

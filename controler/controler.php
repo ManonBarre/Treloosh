@@ -67,6 +67,13 @@ function table()
     $user = getUser();
 
     $table = $tableauManager->getTable($user->getId(), $_GET['tab']);
+
+
+    if (isset($_POST['btn-delete'])) {
+        $tableauManager->delete($_GET['tab']);
+        header('Location: index.php');
+    }
+
     require('view/pageTableau.php');
 }
 
@@ -87,6 +94,13 @@ function userParam()
         } else {
             throw new Exception('Les mots de passe ne correspondent pas');
         }
+    }
+
+    if (isset($_POST['delete'])) {
+        $userTemp = new User($user->getMail(), $_POST['password'], $_POST['name'], $_POST['firstname']);
+        $userTemp->setId($user->getId());
+        $userTemp->delete();
+        deconnexion();
     }
 
     require('view/pageParametre.php');
